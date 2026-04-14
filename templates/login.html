@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BigStreet - Acesso</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/cadastro.css') }}">
+</head>
+
+<body class="login-body">
+    <div class="login-container">
+        <h2 style="text-align: center; margin-bottom: 25px; color: var(--mid-blue);">Login</h2>
+                <form id="formAuth">
+            <div class="form-group">
+                <input type="email" id="email" placeholder="E-mail" autocomplete="email" required>
+                <div class="password-field">
+                    <input type="password" id="senha" placeholder="Senha" autocomplete="current-password" required>
+                    <button type="button" class="password-toggle" data-target="senha" aria-label="Mostrar senha" aria-pressed="false">
+                        <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                            <path d="M1.5 12s3.8-6 10.5-6 10.5 6 10.5 6-3.8 6-10.5 6-10.5-6-10.5-6Z"></path>
+                            <circle cx="12" cy="12" r="3.25"></circle>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            <div class="login-links-row">
+                <button type="button" class="link-button" id="forgotPasswordBtn">Esqueceu sua senha?</button>
+            </div>
+            <button type="submit" class="btn-block">Entrar</button>
+
+            <p class="toggle-auth">
+                <span>Não tem conta? </span>
+               <a href="{{ url_for('cadastro') }}">Cadastrar</a>
+            </p>
+        </form>
+    </div>
+    <div class="modal-backdrop" id="forgotPasswordModal">
+        <div class="modal-card">
+            <h3 id="forgotPasswordTitle">Recuperar acesso</h3>
+            <p id="forgotPasswordDescription">Informe seu e-mail para enviarmos um código de confirmação.</p>
+            <form id="forgotPasswordForm">
+                <div class="forgot-step active" data-step="email">
+                    <input type="email" id="forgotEmail" placeholder="Seu e-mail" required>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" id="cancelForgotPasswordBtn">Cancelar</button>
+                        <button type="button" class="btn-block" id="sendRecoveryCodeBtn">Enviar código</button>
+                    </div>
+                </div>
+
+                <div class="forgot-step" data-step="code">
+                    <input type="text" id="forgotCode" placeholder="Digite o código recebido" maxlength="6">
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" id="backToEmailStepBtn">Voltar</button>
+                        <button type="button" class="btn-block" id="confirmRecoveryCodeBtn">Confirmar código</button>
+                    </div>
+                </div>
+
+                <div class="forgot-step" data-step="password">
+                    <div class="password-field">
+                        <input type="password" id="forgotNewPassword" placeholder="Nova senha" autocomplete="new-password">
+                        <button type="button" class="password-toggle" data-target="forgotNewPassword" aria-label="Mostrar senha" aria-pressed="false">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M1.5 12s3.8-6 10.5-6 10.5 6 10.5 6-3.8 6-10.5 6-10.5-6-10.5-6Z"></path>
+                                <circle cx="12" cy="12" r="3.25"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="password-field">
+                        <input type="password" id="forgotConfirmPassword" placeholder="Confirmar nova senha" autocomplete="new-password">
+                        <button type="button" class="password-toggle" data-target="forgotConfirmPassword" aria-label="Mostrar senha" aria-pressed="false">
+                            <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                <path d="M1.5 12s3.8-6 10.5-6 10.5 6 10.5 6-3.8 6-10.5 6-10.5-6-10.5-6Z"></path>
+                                <circle cx="12" cy="12" r="3.25"></circle>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="modal-actions">
+                        <button type="button" class="btn-secondary" id="backToCodeStepBtn">Voltar</button>
+                        <button type="submit" class="btn-block">Atualizar senha</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+<div id="message-container"></div>
+</body>
+</html>

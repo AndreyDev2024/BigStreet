@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BigStreet | Arena</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/csshomepage.css') }}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@200;300;400;500;600;700;800&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body class="bigstreet-v12-engine{% if is_guest %} guest-mode{% endif %}" data-usuario-logado="{{ 'true' if usuario_logado else 'false' }}">
+    <div class="global-blur-overlay" id="globalOverlay"></div>
+    <div class="sidebar-mobile-backdrop" id="sidebarMobileBackdrop"></div>
+    <aside class="sidebar-main" id="sidebar">
+        <div class="sidebar-wrapper">
+            <div class="sidebar-brand">
+                <div class="brand-logo-container">
+                    <span class="logo-b" id="sidebarLogo">B</span>
+                    <div class="logo-text">BIG<span class="orange-glow">STREET</span></div>
+                </div>
+
+            </div>
+            <nav class="sidebar-nav-container">
+                <div class="nav-category">
+                    <p class="cat-label">Navegação Principal</p>
+                    <div class="nav-link-item active" data-view="dashboard">
+                        <i class="fas fa-chart-line"></i>
+                        <span class="link-label">Dashboard Arena</span>
+                    </div>
+                    <div class="nav-link-item" data-view="explore">
+                        <i class="fas fa-compass"></i>
+                        <span class="link-label">Explorar  Eventos</span>
+                    </div>
+                    <div class="nav-link-item" data-view="quadras">
+    <i class="fas fa-map"></i>
+    <span class="link-label">Explorar Quadras</span>
+</div>
+                </div>
+                <div class="nav-category">
+                    <p class="cat-label">Minha Jornada</p>
+                    <div class="nav-link-item" data-view="history">
+                        <i class="fas fa-history"></i>
+                        <span class="link-label">Histórico de Jogos</span>
+                    </div>
+                    <div class="nav-link-item" data-view="my-events">
+                        <i class="fas fa-calendar-check"></i>
+                        <span class="link-label">Eventos Criados</span>
+                    </div>
+                </div>
+                <div class="nav-category">
+                    <p class="cat-label">Ferramentas</p>
+                    <div class="nav-link-item create-action" id="triggerCreateModal">
+                        <i class="fas fa-plus-circle"></i>
+                        <span class="link-label">Novo Evento</span>
+                    </div>
+            <div class="nav-link-item create-action" id="triggerCreateCourtModal">
+    <i class="fas fa-map"></i>
+    <span class="link-label">Cadastrar Quadra</span>
+</div>
+                    <div class="nav-link-item" data-view="settings">
+                        <i class="fas fa-cog"></i>
+                        <span class="link-label">Configurações</span>
+                    </div>
+                </div>
+            </nav>
+            <div class="sidebar-footer-controls">
+                {% if not usuario_logado %}
+                <div class="sidebar-guest-auth">
+                    <a class="btn-login sidebar-auth-link" href="/login">Login</a>
+                    <a class="btn-cadastro sidebar-auth-link" href="/cadastro">Cadastro</a>
+                </div>
+                {% endif %}
+            </div>
+    </aside>
+    <div class="modal-system-root" id="createCourtModal">
+    <div class="modal-container-main">
+        <div class="modal-header-fixed">
+            <div class="m-h-info">
+                <h2>Registrar Nova Quadra</h2>
+                <p>Preencha os dados da quadra.</p>
+            </div>
+            <button class="modal-close-x" id="closeCreateCourtModal">&times;</button>
+        </div>
+
+        <div class="modal-body-scrollable">
+            <form id="mainCourtForm">
+
+                <div class="form-section-block">
+                    <div class="block-label">
+                        <i class="fas fa-map-marker-alt"></i> Informações da Quadra
+                    </div>
+
+                    <div class="form-group">
+                        <label>Nome da Quadra</label>
+                        <input type="text" id="court_nome" required>
+                    </div>
+
+                    <div class="form-row-triple">
+                        <div class="form-group">
+                            <label>Cidade</label>
+                            <input type="text" id="court_cidade">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Bairro</label>
+                            <input type="text" id="court_bairro">
+                        </div>
+
+                        <div class="form-group">
+                            <label>Estado</label>
+                            <input type="text" id="court_estado">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Rua e Número</label>
+                        <input type="text" id="court_rua">
+                    </div>
+
+                    <div class="form-group">
+                        <label>CEP</label>
+                        <input type="text" id="court_cep">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Capacidade Máxima</label>
+                        <input type="number" id="court_capacidade" min="1">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Esportes permitidos na quadra</label>
+                        <input type="text" id="court_esportes_lista" placeholder="Ex: Futebol, Futsal, Basquete">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Valor da quadra por 30 minutos (R$)</label>
+                        <input type="number" id="court_valor_30min" min="0" step="0.01" placeholder="Ex: 25,00">
+                        <small>Você define qualquer valor para cada bloco de 30 minutos.</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Comprovante de propriedade da quadra (foto)</label>
+                        <input type="file" id="court_owner_doc" accept="image/*" required>
+                        <small>Simularemos a verificação em 2 segundos.</small>
+                    </div>
+
+                    <div class="form-section-block">
+                        <div class="block-label"><i class="fas fa-clock"></i> Horários de locação por dia</div>
+                        <div id="courtWeekSchedule" class="week-schedule-grid"></div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+
+        <div class="modal-footer-fixed">
+            <button class="btn-modal-cancel" id="cancelCourtBtn">Cancelar</button>
+            <button class="btn-modal-submit" id="saveCourtBtn">Registrar Quadra</button>
+        </div>
+    </div>
+</div>
+    <main class="main-viewport" id="mainContent">
+        <header class="navbar-top">
+            <button type="button" class="home-menu-toggle" id="headerMenuToggle" aria-label="Abrir menu principal" aria-controls="sidebar" aria-expanded="false">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="navbar-stats-container {% if usuario_logado %}navbar-stats-container--logged{% else %}navbar-stats-container--guest{% endif %}">
+                <div class="stat-item">
+                    <span class="stat-v">12</span>
+                    <span class="stat-l">Partidas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-v">4.9</span>
+                    <span class="stat-l">Reputação</span>
+                </div>
+                {% if usuario_logado %}
+                <div class="profile-trigger-btn profile-trigger-btn--avatar-only" id="profileMenuTrigger">
+                    <div class="p-mini-avatar" id="profileMiniAvatar">
+                        <span class="profile-initials" id="profileInitials">--</span>
+                        <img id="profileMiniAvatarImg" alt="Foto do perfil">
+                    </div>
+                    <div class="profile-dropdown-menu" id="profileDropdownMenu">
+                        <div class="profile-dropdown-head">
+                            <div class="profile-dropdown-avatar" id="profileDropdownAvatar">
+                                <span class="profile-initials" id="profileDropdownInitials">--</span>
+                                <img id="profileDropdownAvatarImg" alt="Foto do perfil">
+                            </div>
+                            <div>
+                                <strong id="profileDropdownName">Atleta</strong>
+                                <p>Gerencie sua conta</p>
+                            </div>
+                        </div>
+                        <div class="profile-friends-block" id="profileFriendsBlock">
+                            <p class="profile-friends-title"><i class="fas fa-user-friends"></i> Amigos</p>
+                            <div id="profileFriendRequests" class="profile-friends-requests"></div>
+                            <div id="profileFriendsList" class="profile-friends-list"></div>
+                            <div class="profile-search-players">
+                                <label>Buscar jogador pelo nome</label>
+                                <div class="profile-search-row">
+                                    <input type="search" id="invitePlayerSearchInput" placeholder="Digite nome ou e-mail" autocomplete="off">
+                                    <button type="button" class="btn-modal-submit" id="invitePlayerSearchBtn">Buscar</button>
+                                </div>
+                                <div id="invitePlayerSearchResults" class="profile-search-results"></div>
+                            </div>
+                            <p class="profile-friends-title profile-friends-title--sub"><i class="fas fa-history"></i> Jogadores de eventos recentes</p>
+                            <div id="profileRecentPlayers" class="profile-recent-players"></div>
+                            <div class="profile-invite-event-block">
+                                <label>Convidar jogador para seu evento</label>
+                                <select id="inviteToEventSelect"></select>
+                                <select id="inviteToEventUserSelect"></select>
+                                <button type="button" class="btn-modal-submit" id="profileInviteToEventBtn">Enviar convite ao evento</button>
+                            </div>
+                            <div class="profile-invite-site-users">
+                                <label>Ou escolha na lista</label>
+                                <select id="inviteSiteUserSelect"></select>
+                                <button type="button" class="btn-modal-submit profile-invite-go" id="profileInviteUserBtn">Enviar pedido de amizade</button>
+                            </div>
+                        </div>
+                        <button type="button" class="profile-menu-item" id="openSettingsFromProfile">
+                            <i class="fas fa-user-cog"></i> Configurações
+                        </button>
+                        <button type="button" class="profile-menu-item" id="logoutBtn">
+                            <i class="fas fa-door-open"></i> Sair da conta
+                        </button>
+                    </div>
+                </div>
+                {% else %}
+                <div class="header-auth-actions">
+                    <a class="btn-login header-auth-link" href="/login">Login</a>
+                    <a class="btn-cadastro header-auth-link" href="/cadastro">Cadastro</a>
+                </div>
+                {% endif %}
+            </div>
+        </header>
+        <div class="dynamic-container">
+
+
+    <!-- DASHBOARD -->
+    <section class="viewport-section active" id="view-dashboard">
+        <!-- ========== CÓDIGO ADICIONADO - INÍCIO (Hero "Olá, Atleta") ========== -->
+        <div class="hero-welcome-banner">
+            <div class="hero-text-content">
+                <h1>Bem-vindo, <span class="user-name-display" id="userName">Atleta</span></h1>
+                <p id="userWelcomeSub">Sua próxima vitória começa agora.</p>
+            </div>
+            <div class="hero-image-deco"></div>
+        </div>
+        <!-- ========== CÓDIGO ADICIONADO - FIM (Hero) ========== -->
+
+        <!-- ========== CÓDIGO ADICIONADO - INÍCIO (Cards de resumo: partidas ganhas, quadras, eventos) ========== -->
+            <div class="dashboard-summary-cards" id="dashboardSummaryCards">
+            <div class="summary-card summary-card--wins">
+                <div class="summary-card__icon"><i class="fas fa-trophy"></i></div>
+                <div class="summary-card__content">
+                    <span class="summary-card__value" id="dashPartidasGanhas">0</span>
+                    <span class="summary-card__label">Partidas ganhas</span>
+                </div>
+            </div>
+            <div class="summary-card summary-card--courts">
+                <div class="summary-card__icon"><i class="fas fa-map-marker-alt"></i></div>
+                <div class="summary-card__content">
+                    <span class="summary-card__value" id="dashRepPartidas">4.5</span>
+                    <span class="summary-card__label">Reputação (partidas)</span>
+                    <ul class="summary-card__list" id="dashQuadrasFreqList">
+                        <li>—</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="summary-card summary-card--events">
+                <div class="summary-card__icon"><i class="fas fa-calendar-plus"></i></div>
+                <div class="summary-card__content">
+                    <span class="summary-card__value" id="dashEventosCriados">0</span>
+                    <span class="summary-card__label">Eventos criados</span>
+                </div>
+            </div>
+            <div class="summary-card summary-card--goals">
+                <div class="summary-card__icon"><i class="fas fa-futbol"></i></div>
+                <div class="summary-card__content">
+                    <span class="summary-card__value" id="dashGols">0</span>
+                    <span class="summary-card__label">Gols</span>
+                </div>
+            </div>
+        </div>
+        <!-- ========== CÓDIGO ADICIONADO - FIM (Cards de resumo) ========== -->
+
+        <!-- Layout em coluna única (adicionado: sem coluna lateral vazia) -->
+        <div class="dashboard-grid-layout">
+            <div class="grid-main-column">
+                <div class="section-header-row">
+                    <h2>Partidas Ativas</h2>
+                </div>
+                <div id="activeSubscriptionsList" class="cards-render-stack"></div>
+
+                <div class="section-header-row" style="margin-top:32px;">
+                    <h2>Quadras Pr&oacute;ximas</h2>
+                </div>
+                <div id="nearbyCourtsList" class="cards-render-grid"></div>
+
+                <div class="section-header-row" style="margin-top:32px;">
+                    <h2>Eventos Pr&oacute;ximos</h2>
+                </div>
+                <div id="nearbyEventsList" class="cards-render-stack"></div>
+
+                <div class="section-header-row" style="margin-top:32px;">
+                    <h2>Eventos por Esporte</h2>
+                </div>
+                <div class="sports-tabs-container">
+                    <div class="sports-tabs-header">
+                        <button class="sports-tab-btn active" data-sport-tab="futebol">Futebol</button>
+                        <button class="sports-tab-btn" data-sport-tab="volei">V&ocirc;lei</button>
+                        <button class="sports-tab-btn" data-sport-tab="basquete">Basquete</button>
+                    </div>
+                    <div class="sports-tabs-content">
+                        <div id="sportTabFutebol" class="sports-tab-pane active"></div>
+                        <div id="sportTabVolei" class="sports-tab-pane"></div>
+                        <div id="sportTabBasquete" class="sports-tab-pane"></div>
+                    </div>
+                    <div class="sports-tabs-footer">
+                        <button class="btn-modal-submit" onclick="engine.ui.goToView('explore')">Ver mais eventos</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- EXPLORE -->
+    <section class="viewport-section" id="view-explore">
+
+        <div class="explore-filter-header">
+            <div class="filter-headline">
+                <h2>Explore as Melhores Arenas</h2>
+                <p>Use os filtros abaixo para encontrar o jogo perfeito.</p>
+            </div>
+            <form id="exploreFiltersForm" class="explore-filters-form">
+                <div class="filters-row">
+                    <div class="filter-chip">
+                        <label>Cidade</label>
+                        <input type="text" id="filtro_cidade" placeholder="Ex: Juatuba">
+                    </div>
+                    <div class="filter-chip">
+                        <label>Esporte</label>
+                        <select id="filtro_esporte">
+                            <option value="">Todos</option>
+                            <option value="Futebol">Futebol</option>
+                            <option value="Volei">V&ocirc;lei</option>
+                            <option value="Basquete">Basquete</option>
+                        </select>
+                    </div>
+                    <div class="filter-chip">
+                        <label>Faixa Et&aacute;ria</label>
+                        <select id="filtro_faixa">
+                            <option value="">Todas</option>
+                            <option value="Livre">Livre</option>
+                            <option value="12+">12+</option>
+                            <option value="14+">14+</option>
+                            <option value="16+">16+</option>
+                            <option value="18+">18+</option>
+                        </select>
+                    </div>
+                    <div class="filter-chip">
+                        <label>G&ecirc;nero</label>
+                        <select id="filtro_genero">
+                            <option value="">Todos</option>
+                            <option value="Misto">Misto</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                        </select>
+                    </div>
+                    <div class="filter-chip">
+                        <label>Data</label>
+                        <input type="date" id="filtro_data">
+                    </div>
+                    <div class="filter-chip filter-chip--wide">
+                        <label>Busca</label>
+                        <input type="text" id="filtro_busca" placeholder="Nome do evento, bairro...">
+                    </div>
+                </div>
+                <div class="filters-actions">
+                    <button type="button" class="btn-modal-submit" id="btnAplicarFiltros">Aplicar</button>
+                    <button type="button" class="btn-modal-cancel" id="btnLimparFiltros">Limpar</button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Eventos -->
+        <div id="exploreEventsGrid" class="cards-render-grid"></div>
+
+    </section>
+    <section id="view-quadras" class="viewport-section">
+        <div class="section-header">
+            <h2>Explorar Quadras</h2>
+            <p>Veja todas as quadras cadastradas.</p>
+        </div>
+
+        <div class="explore-filter-header">
+            <form id="quadrasFiltersForm" class="explore-filters-form">
+                <div class="filters-row">
+                    <div class="filter-chip">
+                        <label>Cidade</label>
+                        <input type="text" id="filtro_q_cidade" placeholder="Ex: Juatuba">
+                    </div>
+                    <div class="filter-chip">
+                        <label>Bairro</label>
+                        <input type="text" id="filtro_q_bairro" placeholder="Ex: Francelinos">
+                    </div>
+                    <div class="filter-chip">
+                        <label>Esporte</label>
+                        <input type="text" id="filtro_q_esporte" placeholder="Futebol, Vôlei...">
+                    </div>
+                    <div class="filter-chip">
+                        <label>Tipo</label>
+                        <select id="filtro_q_tipo">
+                            <option value="">Todos</option>
+                            <option value="Quadra Alugada">Alugada</option>
+                            <option value="Quadra publica">P&uacute;blica</option>
+                        </select>
+                    </div>
+                    <div class="filter-chip">
+                        <label>Capacidade M&iacute;n.</label>
+                        <input type="number" id="filtro_q_capacidade" min="0" placeholder="Ex: 10">
+                    </div>
+                </div>
+                <div class="filters-actions">
+                    <button type="button" class="btn-modal-submit" id="btnAplicarFiltrosQuadra">Aplicar</button>
+                    <button type="button" class="btn-modal-cancel" id="btnLimparFiltrosQuadra">Limpar</button>
+                </div>
+            </form>
+        </div>
+
+        <div id="quadrasGrid" class="cards-render-grid"></div>
+
+    </section>
+
+    <!-- HISTORY -->
+    <section class="viewport-section" id="view-history">
+        <div class="history-header-meta">
+            <h2>Histórico de Atividade</h2>
+            <div class="meta-data-summary">
+                <div class="meta-chip" id="historyTotalGames">Total: 48 Jogos</div>
+                <div class="meta-chip" id="historyGoals">Gols: 124</div>
+                <div class="meta-chip meta-chip--rating" id="historyReputationChip">Reputacao: 5.0</div>
+            </div>
+        </div>
+        <div id="historyDetailedList" class="cards-render-stack-wide"></div>
+    </section>
+
+
+    <!-- MY EVENTS -->
+    <section class="viewport-section" id="view-my-events">
+        <div class="owned-events-header">
+            <div>
+                <h2>Meus Eventos Criados</h2>
+                <p>Veja tudo o que você organizou e gerencie suas arenas publicadas.</p>
+            </div>
+            <button class="btn-create-mini" onclick="engine.ui.openModal('createModal')">+ Criar Novo Evento</button>
+        </div>
+        <div id="ownedEventsList" class="cards-render-stack-wide"></div>
+
+        <div class="owned-events-header owned-events-header--secondary">
+            <div>
+                <h2>Minhas Quadras Criadas</h2>
+                <p>Confira as quadras cadastradas por você dentro da plataforma.</p>
+            </div>
+            <button class="btn-create-mini btn-create-mini--court" id="openMyCourtsCreateBtn">+ Criar Nova Quadra</button>
+        </div>
+        <div id="ownedCourtsList" class="cards-render-grid"></div>
+    </section>
+
+
+    <!-- SETTINGS -->
+    <section class="viewport-section" id="view-settings">
+        <div class="settings-complex-layout">
+            <div class="settings-nav-sidebar">
+                <button class="s-nav-btn active" data-pane="profile">
+                    <i class="fas fa-user-circle"></i> Meu Perfil
+                </button>
+                <button class="s-nav-btn" data-pane="security">
+                    <i class="fas fa-lock"></i> Segurança
+                </button>
+                <button class="s-nav-btn" data-pane="theme">
+                    <i class="fas fa-paint-roller"></i> Tema
+                </button>
+                <button class="s-nav-btn" data-pane="preferences">
+                    <i class="fas fa-sliders-h"></i> Preferências
+                </button>
+                <button class="s-nav-btn" data-pane="sports">
+                    <i class="fas fa-futbol"></i> Esportes
+                </button>
+            </div>
+
+            <div class="settings-content-display">
+
+                <div class="settings-pane active" id="pane-profile">
+                    <div class="pane-header">
+                        <h3>Informações do Atleta</h3>
+                        <p>Gerencie como os outros jogadores veem você.</p>
+                    </div>
+
+                    <div class="profile-editor-grid">
+                        <div class="avatar-upload-zone">
+                            <div class="large-avatar" id="settingsLargeAvatar">
+                                <span class="profile-initials" id="settingsLargeAvatarInitials">FS</span>
+                                <img id="settingsLargeAvatarImg" alt="Foto do perfil">
+                            </div>
+                            <input type="file" id="settingsPhotoInput" accept="image/*" hidden>
+                            <button class="change-photo-btn" id="changePhotoBtn" type="button">Trocar Foto</button>
+                        </div>
+
+                        <div class="form-inputs-col">
+                            <div class="form-item">
+                                <label>Nome Completo</label>
+                                <input type="text" id="settingsFullName" value="Felipe Silva">
+                            </div>
+
+                            <div class="form-item">
+                                <label>Esporte de Preferência</label>
+                                <select id="settingsFavoriteSport">
+                                    <option>Futebol</option>
+                                    <option>Basquete</option>
+                                    <option>Vôlei</option>
+                                </select>
+                            </div>
+
+                            <div class="form-item">
+                                <label>Bio do Atleta</label>
+                                <textarea id="settingsBio">
+Jogador de final de semana, gosto de competitividade.
+                                </textarea>
+                            </div>
+                            <div class="form-item">
+                                <button class="btn-modal-submit" type="button" id="saveProfileSettingsBtn">Salvar perfil</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-pane" id="pane-security">
+                    <div class="pane-header">
+                        <h3>Segurança</h3>
+                        <p>Altere sua senha e mantenha sua conta protegida.</p>
+                    </div>
+                    <div class="form-inputs-col">
+                        <div class="form-item">
+                            <label>Senha atual</label>
+                            <input type="password" id="settingsCurrentPassword" placeholder="Digite sua senha atual">
+                        </div>
+                        <div class="form-item">
+                            <label>Nova senha</label>
+                            <input type="password" id="settingsNewPassword" placeholder="Digite a nova senha">
+                        </div>
+                        <div class="form-item">
+                            <label>Confirmar nova senha</label>
+                            <input type="password" id="settingsConfirmPassword" placeholder="Repita a nova senha">
+                        </div>
+                        <div class="form-item">
+                            <button class="btn-modal-submit" type="button" id="savePasswordSettingsBtn">Alterar senha</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-pane" id="pane-theme">
+                    <div class="pane-header">
+                        <h3>Tema</h3>
+                        <p>Escolha como o BigStreet deve aparecer para você.</p>
+                    </div>
+
+                    <div class="theme-selection-grid">
+                        <div class="theme-option-card dark"
+                             data-theme-option="dark"
+                             onclick="engine.logic.setTheme('dark')">
+                            <div class="t-p-v"></div>
+                            <p>Escuro</p>
+                        </div>
+
+                        <div class="theme-option-card light"
+                             data-theme-option="light"
+                             onclick="engine.logic.setTheme('light')">
+                            <div class="t-p-v"></div>
+                            <p>Claro</p>
+                        </div>
+
+                        <div class="theme-option-card auto"
+                             data-theme-option="auto"
+                             onclick="engine.logic.setTheme('auto')">
+                            <div class="t-p-v"></div>
+                            <p>No horário</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="settings-pane" id="pane-preferences">
+                    <div class="pane-header">
+                        <h3>Preferências</h3>
+                        <p>Escolha como sua conta deve se comportar dentro do site.</p>
+                    </div>
+                    <div class="preferences-grid">
+                        <label class="preference-card">
+                            <input type="checkbox" id="settingsEmailNotifications" checked>
+                            <div>
+                                <strong>Receber notificações por e-mail</strong>
+                                <p>Receba avisos sobre partidas, convites e novidades.</p>
+                            </div>
+                        </label>
+                        <label class="preference-card">
+                            <input type="checkbox" id="settingsPublicProfile" checked>
+                            <div>
+                                <strong>Perfil público para outros jogadores</strong>
+                                <p>Permite que outros atletas encontrem seu perfil na plataforma.</p>
+                            </div>
+                        </label>
+                        <label class="preference-card">
+                            <input type="checkbox" id="settingsMatchReminders" checked>
+                            <div>
+                                <strong>Lembretes de partidas</strong>
+                                <p>Receba lembretes antes dos jogos e eventos criados.</p>
+                            </div>
+                        </label>
+                        <label class="preference-card">
+                            <input type="checkbox" id="settingsDarkAtNight">
+                            <div>
+                                <strong>Ativar tema escuro à noite</strong>
+                                <p>Aplica automaticamente o tema escuro em horários noturnos.</p>
+                            </div>
+                        </label>
+                    </div>
+                    <div class="form-item" style="margin-top: 20px;">
+                        <button class="btn-modal-submit" type="button" id="savePreferencesBtn">Salvar preferências</button>
+                    </div>
+                </div>
+
+                <div class="settings-pane" id="pane-sports">
+                    <div class="pane-header">
+                        <h3>Esportes Preferidos</h3>
+                        <p>Adicione seus esportes favoritos e posições.</p>
+                    </div>
+                    <div id="current-sports">
+                        <h4>Seus Esportes</h4>
+                        <ul id="sports-list"></ul>
+                    </div>
+                    <form id="add-sport-form">
+                        <h4>Adicionar Esporte</h4>
+                        <div class="form-item">
+                            <label>Esporte</label>
+                            <select id="esporte-select" required>
+                                <option value="">Selecione um esporte</option>
+                                <option value="Volei">Vôlei</option>
+                                <option value="Futebol">Futebol</option>
+                                <option value="Basquete">Basquete</option>
+                                <option value="Tenis">Tenis</option>
+                                <option value="Corrida">Corrida</option>
+                                <option value="Outro">Outro</option>
+                            </select>
+                            <input type="text" id="esporte-custom" placeholder="Digite o esporte" style="display: none;">
+                        </div>
+                        <div class="form-item">
+                            <label>Posição</label>
+                            <select id="posicao-select" style="display: none;">
+                                <option value="">Selecione uma posição</option>
+                            </select>
+                            <input type="text" id="posicao-custom" placeholder="Digite a posição" style="display: none;">
+                        </div>
+                        <div class="form-item">
+                            <label>Observação (opcional)</label>
+                            <textarea id="observacao" rows="3"></textarea>
+                        </div>
+                        <div class="form-item">
+                            <button type="submit" class="btn-modal-submit">Adicionar</button>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </section>
+        </div>
+    </main>
+    <div class="modal-system-root" id="createModal">
+        <div class="modal-container-main">
+            <div class="modal-header-fixed">
+                <div class="m-h-info">
+                    <h2>Publicar Nova Arena</h2>
+                    <p>Preencha os dados técnicos para o banco de dados.</p>
+                </div>
+                <button class="modal-close-x" id="closeCreateModal">&times;</button>
+            </div>
+            <div class="modal-body-scrollable">
+                <form id="mainEventForm">
+                    <input type="hidden" id="sql_edit_event_id" value="">
+                    <div id="qr-success-layout" style="display: none; text-align: center; padding: 20px;">
+                        <h2 style="color: #2ecc71;">ARENA PUBLICADA!</h2>
+                        <div class="qr-frame" style="background: white; padding: 10px; display: inline-block; border-radius: 10px;">
+                            <img id="imagem-qr-acesso" src="" style="width: 200px;">
+                        </div>
+                        <p id="linkTexto" style="color: var(--orange-glow); font-size: 12px;"></p>
+                        <button class="btn-modal-submit" onclick="window.location.reload()">Concluir</button>
+                    </div>
+                    <div class="form-section-block">
+                        <div class="block-label"><i class="fas fa-info-circle"></i> Informações do Evento</div>
+                        <div class="form-row-double">
+                            <div class="form-group">
+                                <label>Título do Evento</label>
+                                <input type="text" id="sql_nome" placeholder="Ex: Racha Noturno do Morumbi" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Esporte</label>
+                                <select id="sql_esporte">
+                                    <option value="Futebol">Futebol Society</option>
+                                    <option value="Basquete">Basquete Street</option>
+                                    <option value="Volei">Vôlei</option>
+                                    <option value="Tenis">Tenis</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row-double">
+                            <div class="form-group">
+                                <label>Máximo de Atletas</label>
+                                <input type="number" id="sql_max" value="12" min="2">
+                            </div>
+                            <div class="form-group">
+                                <label>Gênero</label>
+                                <select id="sql_genero">
+                                    <option value="Misto">Misto</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                </select>
+                            </div>
+                        </div>
+                          <div class="form-row-double">
+                            <div class="form-group">
+                                <label>Data</label>
+                                <input type="date" id="sql_data"  name="data_evento" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Horário de Início</label>
+                                <input type="time" id="sql_inicio" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label>Horário de Término</label>
+                                <input type="time" id="sql_fim" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Faixa Etária</label>
+                            <select id="sql_faixa">
+                                <option value="Livre">Livre</option>
+                                <option value="12+">12+</option>
+                                <option value="14+">14+</option>
+                                <option value="16+">16+</option>
+                                <option value="18+">18+</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Descrição e Regras (Expandido)</label>
+                            <textarea id="sql_desc" rows="4" placeholder="Detalhe as regras, nível técnico e avisos importantes..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="sql_creator_participates" checked> Criador participa do evento</label>
+                        </div>
+                    </div>
+                    <div class="form-section-block">
+                        <div class="block-label"><i class="fas fa-map-marker-alt"></i> Localização (Tabela Quadra)</div>
+
+                        <div class="form-row-double">
+                            <div class="form-group">
+                                <label>CEP</label>
+                                <input type="text" id="sql_cep" placeholder="00000-000">
+                            </div>
+                            <div class ="form-group">
+                                <label>Numero</label>
+                                <input type = "text" id= "sql_numero" placeholder="2359">
+                            </div>
+                        </div>
+                        <div class="form-row-triple">
+                            <div class="form-group">
+                                <label>Cidade</label>
+                                <input type="text" id="sql_cidade" placeholder="Ex: São Paulo">
+                            </div>
+                            <div class="form-group">
+                                <label>Bairro</label>
+                                <input type="text" id="sql_bairro" placeholder="Ex: Moema">
+                            </div>
+                            <div class="form-group">
+                                <label>Estado</label>
+                                <input type="text" id="sql_estado" placeholder="Ex: SP">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Rua</label>
+                            <input type="text" id="sql_rua" placeholder="Rua das Olimpíadas, 123">
+                        </div>
+
+                        <div class="form-section-block" id="eventMenuPaymentSection">
+                            <div class="block-label"><i class="fas fa-coins"></i> Gestão Financeira</div>
+                            <div class="form-group">
+                                <label>Quadra</label>
+                                <select id="sql_quadra">
+                                    <option value="Quadra publica">Quadra pública</option>
+                                    <option value="Quadra Alugada">Quadra Alugada</option>
+                                </select>
+                            </div>
+                            <div id="eventMenuPaymentFields">
+                                <div class="form-row-triple">
+                                    <div class="form-group">
+                                        <label>Valor Aluguel (Total)</label>
+                                        <input type="number" id="sql_valor" step="0.01" placeholder="R$ 0,00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Banco</label>
+                                        <input type="text" id="sql_banco" placeholder="Ex: Nubank">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Titular</label>
+                                        <input type="text" id="sql_titular" placeholder="Nome Completo">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label>Chave PIX (Recebimento)</label>
+                                    <input type="text" id="sql_pix" placeholder="CPF, E-mail ou Celular">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer-fixed">
+                <button class="btn-modal-cancel" id="cancelEventBtn">Descartar</button>
+                <button class="btn-modal-submit" id="saveEventBtn">Publicar na Arena</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Criar Evento a partir de uma Quadra (aberto pelo botão na card da quadra) -->
+    <div class="modal-system-root" id="createEventFromCourtModal">
+        <div class="modal-container-main">
+            <div class="modal-header-fixed">
+                <div class="m-h-info">
+                    <h2>Criar Evento nesta Quadra</h2>
+                    <p id="createEventFromCourtSubtitle">Preencha os dados do evento.</p>
+                </div>
+                <button class="modal-close-x" id="closeCreateEventFromCourtModal">&times;</button>
+            </div>
+            <div class="modal-body-scrollable">
+                <form id="eventFromCourtForm">
+                    <input type="hidden" id="event_court_quadra_id" value="">
+                    <div class="form-section-block">
+                        <div class="block-label"><i class="fas fa-info-circle"></i> Informações do Evento</div>
+                        <div class="form-row-double">
+                            <div class="form-group">
+                                <label>Título do Evento</label>
+                                <input type="text" id="event_court_nome" placeholder="Ex: Racha Noturno" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Esporte</label>
+                                <select id="event_court_esporte">
+                                    <option value="Futebol">Futebol</option>
+                                    <option value="Basquete">Basquete</option>
+                                    <option value="Volei">Vôlei</option>
+                                    <option value="Tenis">Tênis</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row-double">
+                            <div class="form-group">
+                                <label>Máximo de Atletas</label>
+                                <input type="number" id="event_court_max" value="12" min="2">
+                            </div>
+                            <div class="form-group">
+                                <label>Gênero</label>
+                                <select id="event_court_genero">
+                                    <option value="Misto">Misto</option>
+                                    <option value="Masculino">Masculino</option>
+                                    <option value="Feminino">Feminino</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <small>Escolha os horários na grade abaixo (intervalos de 30 em 30 minutos).</small>
+                        </div>
+                        <div class="form-group">
+                            <label>Faixa Etária</label>
+                            <select id="event_court_faixa">
+                                <option value="Livre">Livre</option>
+                                <option value="12+">12+</option>
+                                <option value="14+">14+</option>
+                                <option value="16+">16+</option>
+                                <option value="18+">18+</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label>Descrição e Regras</label>
+                            <textarea id="event_court_desc" rows="3" placeholder="Regras, nível técnico..."></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label><input type="checkbox" id="event_court_creator_participates" checked> Criador participa do evento</label>
+                        </div>
+                    </div>
+                    <div class="form-section-block">
+                        <div class="block-label"><i class="fas fa-map-marker-alt"></i> Local (preenchido pela quadra)</div>
+                        <div class="form-row-double">
+                            <div class="form-group">
+                                <label>CEP</label>
+                                <input type="text" id="event_court_cep" readonly placeholder="00000-000">
+                            </div>
+                            <div class="form-group">
+                                <label>Número</label>
+                                <input type="text" id="event_court_numero" readonly placeholder="S/N">
+                            </div>
+                        </div>
+                        <div class="form-row-triple">
+                            <div class="form-group">
+                                <label>Cidade</label>
+                                <input type="text" id="event_court_cidade" readonly placeholder="Cidade">
+                            </div>
+                            <div class="form-group">
+                                <label>Bairro</label>
+                                <input type="text" id="event_court_bairro" readonly placeholder="Bairro">
+                            </div>
+                            <div class="form-group">
+                                <label>Estado</label>
+                                <input type="text" id="event_court_estado" readonly placeholder="UF">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Rua</label>
+                            <input type="text" id="event_court_rua" readonly placeholder="Rua">
+                        </div>
+                    </div>
+                    <div class="form-section-block" id="eventCourtRentalDocsSection">
+                        <div class="block-label"><i class="fas fa-file-alt"></i> Documentos para locação da quadra</div>
+                        <div class="form-row-double">
+                            <div class="form-group">
+                                <label>Nome completo do locatário</label>
+                                <input type="text" id="event_court_renter_name" placeholder="Nome completo">
+                            </div>
+                            <div class="form-group">
+                                <label>CPF</label>
+                                <input type="text" id="event_court_renter_cpf" placeholder="000.000.000-00">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Documento (imagem/PDF)</label>
+                            <input type="file" id="event_court_renter_doc" accept="image/*,.pdf">
+                            <small>Simularemos a verificação em 2 segundos.</small>
+                        </div>
+                    </div>
+                    <div class="form-section-block" id="privateCourtTimePickerSection">
+                        <div class="block-label"><i class="fas fa-th"></i> Seleção de horários (quadra privada).</div>
+                        <p class="participants-empty-text">Verde: disponível • Azul: reservado por você (pode alterar) • Vermelho: indisponível.</p>
+                        <div id="privateCourtSlotsGrid" class="private-slots-grid"></div>
+                    </div>
+                    <div class="form-section-block" id="eventCourtPaymentSection">
+                        <div class="block-label"><i class="fas fa-coins"></i> Pagamento</div>
+                        <div class="form-group">
+                            <label>Tipo de quadra</label>
+                            <select id="event_court_quadra" disabled>
+                                <option value="Quadra publica">Quadra pública</option>
+                                <option value="Quadra Alugada">Quadra Alugada</option>
+                            </select>
+                        </div>
+                        <div id="eventCourtPaymentFields">
+                            <div class="form-group">
+                                <label>Valor total calculado automaticamente</label>
+                                <input type="number" id="event_court_valor" step="0.01" placeholder="0,00" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label>Chave PIX do criador do evento</label>
+                                <input type="text" id="event_court_pix" placeholder="CPF, E-mail ou Celular">
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer-fixed">
+                <button class="btn-modal-cancel" id="cancelEventFromCourtBtn">Cancelar</button>
+                <button class="btn-modal-submit" id="saveEventFromCourtBtn">Publicar Evento</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-system-root" id="infoModal">
+        <div class="modal-container-main modal-info-details">
+            <div class="modal-header-fixed">
+                <div class="m-h-info">
+                    <h2 id="infoModalTitle">Detalhes</h2>
+                    <p id="infoModalSubtitle" class="info-modal-subtitle"></p>
+                </div>
+                <button class="modal-close-x" onclick="engine.ui.closeModal('infoModal')">&times;</button>
+            </div>
+            <div class="modal-body-scrollable">
+                <div id="infoEventDetails">
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-calendar-day"></i> Data e horário</div>
+                        <div class="info-detail-grid">
+                            <div class="info-detail-item"><span class="info-detail-label">Dia</span><span id="infoEventData"></span></div>
+                            <div class="info-detail-item"><span class="info-detail-label">Início</span><span id="infoEventHoraInicio"></span></div>
+                            <div class="info-detail-item"><span class="info-detail-label">Término</span><span id="infoEventHoraFim"></span></div>
+                        </div>
+                    </div>
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-futbol"></i> Descrição</div>
+                        <p id="infoEventDescricao" class="info-detail-desc"></p>
+                    </div>
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-map-marker-alt"></i> Localização completa</div>
+                        <p id="infoEventEndereco" class="info-detail-address"></p>
+                    </div>
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-wallet"></i> Pagamento / Aluguel</div>
+                        <div id="infoEventPagamento" class="info-detail-payment"></div>
+                        <div id="infoEventActions" class="card-actions-row" style="margin-top:16px;"></div>
+                        <div id="infoEventInviteRow" class="form-row-double" style="display:none;margin-top:12px;">
+                            <div class="form-group" style="flex:1">
+                                <label>Convidar amigo do site</label>
+                                <select id="infoInviteFriendSelect"></select>
+                            </div>
+                            <button type="button" class="btn-modal-submit" id="infoInviteFriendBtn" style="align-self:flex-end;">Convidar para o evento</button>
+                        </div>
+                    </div>
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-users"></i> Jogadores no evento</div>
+                        <div id="infoEventParticipants" class="participants-list"></div>
+                        <div id="infoPlayerBox" class="player-detail-box">
+                            <h3 id="infoPlayerNome">Clique em um nome acima para ver o perfil</h3>
+                            <p id="infoPlayerMeta"></p>
+                            <p id="infoPlayerBio"></p>
+                        </div>
+                    </div>
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-user-shield"></i> Gestão de presença</div>
+                        <div class="info-lists-columns">
+                            <div>
+                                <h4>Espectadores (admin)</h4>
+                                <div id="infoSpectatorsList" class="participants-list"></div>
+                            </div>
+                            <div>
+                                <h4>Jogadores</h4>
+                                <div id="infoPlayersList" class="participants-list"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-comments"></i> Chat do evento</div>
+                        <div id="eventChatMessages" class="event-chat-messages"></div>
+                        <div class="form-row-double">
+                            <div class="form-group" style="flex:1">
+                                <input type="text" id="eventChatInput" placeholder="Digite sua mensagem">
+                            </div>
+                            <button class="btn-modal-submit" id="eventChatSendBtn" type="button">Enviar</button>
+                        </div>
+                        <small id="eventChatHint">Apenas quem está no evento pode enviar mensagens.</small>
+                    </div>
+                </div>
+
+                <div id="infoCourtDetails" style="display:none;">
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-user"></i> Dono da quadra</div>
+                        <p id="infoCourtOwner" class="info-detail-address"></p>
+                        <button type="button" class="btn-card-secondary-outline" id="infoCourtOwnerProfileBtn" style="display:none;">Ver perfil do dono</button>
+                        <div id="infoCourtOwnerActions" class="card-actions-row" style="margin-top:10px;"></div>
+                    </div>
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-map-marker-alt"></i> Local da Quadra</div>
+                        <p id="infoCourtEndereco" class="info-detail-address"></p>
+                        <p id="infoCourtMeta" class="info-detail-meta"></p>
+                    </div>
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-clock"></i> Disponibilidade</div>
+                        <p id="infoCourtDisponibilidade" class="info-detail-desc"></p>
+                    </div>
+                    <div class="info-detail-card">
+                        <div class="block-label"><i class="fas fa-calendar-check"></i> Eventos ativos nesta quadra</div>
+                        <div id="infoCourtActiveEvents" class="participants-list"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-system-root" id="avaliacaoEventoModal">
+        <div class="modal-container-main">
+            <div class="modal-header-fixed">
+                <div class="m-h-info">
+                    <h2>Avaliar jogadores</h2>
+                    <p>Evento finalizado — registre gols e nota (1 a 5). Dados salvos no banco.</p>
+                </div>
+                <button class="modal-close-x" onclick="engine.ui.closeModal('avaliacaoEventoModal')">&times;</button>
+            </div>
+            <div class="modal-body-scrollable" id="avaliacaoEventoHost"></div>
+        </div>
+    </div>
+    <div class="modal-system-root" id="inviteQrModal">
+        <div class="modal-container-main modal-invite-qr">
+            <div class="modal-header-fixed">
+                <div class="m-h-info">
+                    <h2>Convite por QR Code</h2>
+                    <p>Compartilhe este convite para outras pessoas entrarem no evento.</p>
+                </div>
+                <button class="modal-close-x" onclick="engine.ui.closeModal('inviteQrModal')">&times;</button>
+            </div>
+            <div class="modal-body-scrollable invite-qr-body">
+                <div class="invite-qr-frame">
+                    <img id="inviteQrImage" alt="QR Code do convite">
+                </div>
+                <p id="inviteQrEventName" class="invite-qr-event-name"></p>
+                <input type="text" id="inviteQrLink" readonly>
+                <div class="card-actions-row">
+                    <button type="button" class="btn-modal-submit" id="copyInviteLinkBtn">Copiar link</button>
+                    <button type="button" class="btn-card-secondary-outline" id="shareInviteBtn">Compartilhar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% if is_guest and selected_event_id %}
+    <div class="modal-system-root" id="modalGuestPresenca">
+        <div class="modal-container-main modal-guest-presenca">
+            <div class="modal-header-fixed">
+                <div class="m-h-info">
+                    <h2>Confirmar Presença</h2>
+                    <p>Preencha seus dados para entrar no evento como convidado.</p>
+                </div>
+            </div>
+            <div class="modal-body-scrollable">
+                <form id="guestPresencaForm" class="guest-presenca-form">
+                    <input type="hidden" id="guestEventId" value="{{ selected_event_id }}">
+                    <p class="guest-presenca-note">Este modal bloqueia a tela até que a identificação do convidado seja concluída.</p>
+                    <div class="guest-presenca-grid">
+                        <div class="form-group">
+                            <label for="guestNome">Nome</label>
+                            <input type="text" id="guestNome" name="nome" autocomplete="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="guestCpf">CPF</label>
+                            <input type="text" id="guestCpf" name="cpf" inputmode="numeric" maxlength="14" placeholder="Somente números" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="guestIdade">Idade</label>
+                            <input type="number" id="guestIdade" name="idade" min="5" max="120" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="guestPeso">Peso</label>
+                            <input type="number" id="guestPeso" name="peso" min="1" max="400" step="0.1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="guestAltura">Altura</label>
+                            <input type="number" id="guestAltura" name="altura" min="0.5" max="2.8" step="0.01" required>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer-fixed">
+                <button type="button" class="btn-modal-submit" id="guestPresencaSubmitBtn">Confirmar presença</button>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    <div id="toastContainer" class="toast-stack"></div>
+    <div id="message-container"></div>
+
+    <script>
+        window.BIGSTREET_BOOTSTRAP = {{ {
+            "usuario_logado": usuario_logado,
+            "is_guest": is_guest,
+            "selected_event_id": selected_event_id,
+            "guest_presence_confirmed": guest_presence_confirmed
+        } | tojson }};
+    </script>
+    <script src="{{ url_for('static', filename='js/javahomepage.js') }}?v=3"></script>
+</body>
+</html> 

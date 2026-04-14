@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Big Street - Plataforma de gestão esportiva para quadras públicas e privadas. Organize jogos, evite filas e gerencie horários.">
+    <title>Big Street - O Jogo Começa</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,600;0,700;1,800;1,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/inst.css') }}">
+    <script src="{{ url_for('static', filename='js/inst.js') }}" defer></script>
+</head>
+
+<body>
+
+    <header id="inicio">
+        <nav class="navbar" aria-label="Navegacao principal">
+            <a class="logo" href="#inicio" aria-label="Big Street">
+                <span class="white-text">BIG</span><span class="orange-text">STREET</span>
+            </a>
+
+            <button type="button" class="menu-toggle" id="menuToggle" aria-controls="primaryMenu" aria-expanded="false" aria-label="Abrir menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+
+            <div class="nav-menu" id="primaryMenu">
+                <ul class="nav-links">
+                    <li><a href="#sobre" class="nav-link">Sobre Nos</a></li>
+                    <li><a href="#equipe" class="nav-link">Conheca MAGID</a></li>
+                    <li><a href="#servico" class="nav-link">Servicos e Solucoes</a></li>
+                    <li><a href="#contatos" class="nav-link">Contato</a></li>
+                </ul>
+
+                <div class="nav-actions nav-actions--desktop">
+                    <button type="button" class="btn-login" onclick="window.location.href='{{ url_for('login') }}'">Login</button>
+                    <button type="button" class="btn-cadastro" onclick="window.location.href='{{ url_for('cadastro') }}'">Cadastro</button>
+                </div>
+
+                <div class="nav-actions nav-actions--mobile">
+                    <button type="button" class="btn-login" onclick="window.location.href='{{ url_for('login') }}'">Login</button>
+                    <button type="button" class="btn-cadastro" onclick="window.location.href='{{ url_for('cadastro') }}'">Cadastro</button>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <h1> O jogo começa <br> <span> quando o sol se põe</span></h1>
+            <p> Domine as quadras. Conquiste as ruas. </p>
+            <a href="{{ url_for('cadastro') }}" class="cta-button"> Supere-se </a>
+        </div>
+    </section>
+
+    <section class="sobre" id="sobre">
+        <div class="nos_sobre">
+            <h2 class="sobre-nos-title"> Sobre nós </h2>
+            <p class="sobre-text">
+                O <span class="destaque">Big Street</span> é uma plataforma tecnológica de gestão esportiva, desenvolvida para profissionalizar o uso de quadras e espaços de jogo. Nossa missão é resolver os problemas de logística e convivência que afetam
+                a prática do esporte amador, atuando tanto em espaços públicos quanto privados.
+            </p>
+
+            <p class="sobre-text">
+                Nas quadras de rua, nosso sistema organiza a rotatividade dos times e a fila de espera, eliminando os conflitos e a desorganização frequentes na disputa pelo espaço. Já para as quadras fechadas, oferecemos uma solução eficiente para o agendamento e locação
+                de horários.
+            </p>
+
+            <div class="magid-block">
+                <p>
+                    Todo o projeto é idealizado e mantido pelo <span class="destaque">Grupo Magid</span>, uma equipe de desenvolvedores focada em criar soluções digitais que trazem ordem, transparência e facilidade para a comunidade esportiva.
+                </p>
+            </div>
+        </div>
+    </section>
+    <section class="secao-equipe-pro" id="equipe">
+        <div class="container-equipe">
+            <div class="cabecalho-equipe">
+                <h2 class="titulo-laranja">CONHEÇA A NOSSA EQUIPE</h2>
+                <p class="subtitulo-equipe">GRUPO MAGID</p>
+            </div>
+
+            <div class="grid-equipe-pro">
+
+                <div class="card-pro" onclick="abrirModal('Maria Gabriela', 'Scrum Master', 'Responsável pela orquestração dos nossos processos ágeis, ela atua como Scrum Master, assegurando a eficiência operacional e o foco da equipe em cada ciclo de entrega. Sua expertise técnica é o alicerce do nosso desenvolvimento, ocupando a posição de referência em codificação SQL e arquitetura de dados da organização.', '/static/img/MABI.jpg')">
+                    <div class="foto-wrapper">
+                        <img src="/static/img/MABI.jpg" alt="Foto Maria" class="foto-pro">
+                    </div>
+                    <div class="info-pro">
+                        <h3 class="nome-pro">Maria Gabriela</h3>
+                        <span class="cargo-pro">Scrum Master</span>
+                        <p class="desc-curta-pro">Responsável pela orquestração dos nossos processos ágeis...</p>
+                    </div>
+                </div>
+
+                <div class="card-pro" onclick="abrirModal('Andrey Rafael', 'Desenvolvedor Front-end', 'Engenheiro de Software Full-stack, destacando-se por seu elevado intelecto e expertise técnica de ponta a ponta. Peça-chave no desenvolvimento da nossa Homepage, unindo performance à interface do usuário. Atua em estreita colaboração com seu parceiro Davi Erick, sempre focado em elevar a qualidade e a eficiência das nossas entregas tecnológicas.', '/static/img/adrey-foto.avif')">
+                    <div class="foto-wrapper">
+                        <img src="/static/img/adrey-foto.avif" alt="Foto Andrey" class="foto-pro">
+                    </div>
+                    <div class="info-pro">
+                        <h3 class="nome-pro">Andrey Rafael</h3>
+                        <span class="cargo-pro">Desenvolvedor </span>
+                        <p class="desc-curta-pro">Engenheiro de Software Full-stack, destaca...</p>
+                    </div>
+                </div>
+
+                <div class="card-pro" onclick="abrirModal('Davi Herick', 'Desenvolvedor Full-stack', 'Com uma trajetória marcada pela resiliência e pelo aprendizado prático, Davi atua como Desenvolvedor Full-stack, dominando tanto as camadas de Front-end quanto as de Back-end. Sua abordagem é pautada pela evolução constante e pelo compromisso com o sucesso coletivo da equipe.', '/static/img/davi_perto.jpeg')">
+                    <div class="foto-wrapper">
+                        <img src="/static/img/davi_perto.jpeg" alt="Foto Davi Erick" class="foto-pro">
+                    </div>
+                    <div class="info-pro">
+                        <h3 class="nome-pro">Davi Herick</h3>
+                        <span class="cargo-pro">Desenvolvedor </span>
+                        <p class="desc-curta-pro">Especialista em soluções de ponta a ponta e focado em melhoria contínua.</p>
+                    </div>
+                </div>
+
+                <div class="card-pro" onclick="abrirModal('Gabriel Avelino', 'Desenvolvedor/Web Designer', 'Gabriel Avelino destaca-se pela profundidade de seu conhecimento e por uma postura equilibrada que transmite segurança ao time. Além de ser uma das principais lideranças técnicas no desenvolvimento de sistemas, ele é o responsável pela concepção visual e Web Design do projeto, assegurando que a tecnologia e a estética caminhem juntas.', '/static/img/avelino.jpg')">
+                    <div class="foto-wrapper">
+                        <img src="/static/img/avelino.jpg" alt="Foto Gabriel A." class="foto-pro">
+                    </div>
+                    <div class="info-pro">
+                        <h3 class="nome-pro">Gabriel Avelino</h3>
+                        <span class="cargo-pro">Desenvolvedor
+                            Web Designer</span>
+                        <p class="desc-curta-pro">Destaque em conhecimento técnico e concepção visual...</p>
+                    </div>
+                </div>
+
+                <div class="card-pro" onclick="abrirModal('Gabriel Felipe', 'Desenvolvedor', 'Especialista em unir funcionalidade e estética, este desenvolvedor atua em toda a jornada de criação de software. Reconhecido por sua capacidade de adaptação e aprendizado ágil, ele compõe uma dupla técnica de alta performance ao lado de Gabriel Avelino.', '/static/img/gabriel-f.jpeg')">
+                    <div class="foto-wrapper">
+                        <img src="/static/img/gabriel-f.jpeg" alt="Foto Gabriel F." class="foto-pro">
+                    </div>
+                    <div class="info-pro">
+                        <h3 class="nome-pro">Gabriel Felipe</h3>
+                        <span class="cargo-pro">Desenvolvedor  </span>
+                        <p class="desc-curta-pro">Especialista em unir funcionalidade e estética...</p>
+                    </div>
+                </div>
+
+                <div class="card-pro" onclick="abrirModal('Ingrid Kamilly', 'Especialista em Integrações e APIs', 'Ingrid desempenha um papel vital na interface entre nossos convidados e a tecnologia. É a responsável direta pela gestão de convites e pela arquitetura da API de QR Code, facilitando o controle de acesso de forma inovadora.', '/static/img/ingrid.avif.jpeg')">
+                    <div class="foto-wrapper">
+                        <img src="/static/img/ingrid.avif.jpeg" alt="Foto Ingrid" class="foto-pro">
+                    </div>
+                    <div class="info-pro">
+                        <h3 class="nome-pro">Ingrid Kamilly</h3>
+                        <span class="cargo-pro">Especialista em Integrações e APIs</span>
+                        <p class="desc-curta-pro">Gestão de convites e arquitetura de API de QR Code...</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div id="modal-equipe" class="modal-overlay">
+            <div class="modal-content">
+                <span class="fechar-modal" onclick="fecharModal()">&times;</span>
+                <img id="modal-foto" src="" alt="Foto do Integrante" class="modal-foto-img">
+                <h3 id="modal-nome" class="modal-nome-texto">Nome</h3>
+                <span id="modal-cargo" class="modal-cargo-texto">Cargo</span>
+                <p id="modal-desc" class="modal-desc-texto">Descrição completa vai aparecer aqui.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="servicos " id="servico">
+        <div class="servicos__cabecalho ">
+            <h2 class="servicos__titulo ">Nossos Serviços e Soluções</h2>
+            <h3 class="servicos__subtitulo ">Tecnologia para profissionalizar o esporte amador, do asfalto às quadras fechadas.</h3>
+
+            <p class="servicos__descricao ">
+                O Big Street é muito mais que um aplicativo: é o fim da desorganização logística na hora do jogo.
+            </p>
+            <p class="servicos__descricao ">
+                Através da tecnologia desenvolvida pelo Grupo Magid, entregamos ordem, transparência e facilidade para que a comunidade esportiva se preocupe apenas com uma coisa: jogar.
+            </p>
+        </div>
+
+        <div class="servicos__grade ">
+            <article class="solucao-card ">
+                <h4 class="solucao-card__titulo ">Para Quadras Públicas e de Rua: O Fim da Confusão</h4>
+                <p class="solucao-card__descricao ">O esporte democrático exige organização. Nossa plataforma leva a gestão profissional para o esporte amador nas ruas e praças.</p>
+
+                <ul class="solucao-card__lista ">
+                    <li class="solucao-card__item ">
+                        <strong class="destaque ">Fila de Espera Digital e Transparente:</strong> Chega de gritar "quem é o próximo? ". O sistema organiza a ordem dos times de forma clara e acessível a todos.
+                    </li>
+                    <li class="solucao-card__item ">
+                        <strong class="destaque ">Controle Inteligente de Rotatividade:</strong> Garantimos que a troca de times aconteça de forma justa, com tempos de jogo e regras de permanência definidos e respeitados por todos.
+                    </li>
+                    <li class="solucao-card__item ">
+                        <strong class="destaque ">Convivência Pacífica:</strong> Eliminamos os atritos, brigas e a desorganização frequentes na disputa pelo espaço físico, promovendo um ambiente esportivo muito mais saudável e amigável.
+                    </li>
+                </ul>
+            </article>
+
+            <article class="solucao-card ">
+                <h4 class="solucao-card__titulo ">Para Quadras Privadas: Gestão e Rentabilidade</h4>
+                <p class="solucao-card__descricao ">Para donos de complexos esportivos que querem lotar a agenda sem dor de cabeça com administração.</p>
+
+                <ul class="solucao-card__lista ">
+                    <li class="solucao-card__item ">
+                        <strong class="destaque ">Agendamento e Locação Descomplicados:</strong> Ofereça aos seus clientes a facilidade de consultar horários disponíveis e reservar a quadra rapidamente, sem depender de trocas infinitas de mensagens no
+                        WhatsApp.
+                    </li>
+                    <li class="solucao-card__item ">
+                        <strong class="destaque ">Prevenção de Choque de Horários:</strong> Nosso sistema garante que não existam reservas duplicadas, protegendo a credibilidade do seu espaço.
+                    </li>
+                    <li class="solucao-card__item ">
+                        <strong class="destaque ">Visão de Gestão Profissional:</strong> Centralize o controle dos seus horários de pico e ociosos, facilitando a vida do administrador e a experiência do jogador.
+                    </li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
+    <section class="contato " id="contatos">
+        <div class="contato__cabecalho ">
+            <h2 class="contato__titulo ">VAMOS JOGAR JUNTOS? ENTRE EM CONTATO</h2>
+            <p class="contato__descricao ">Tem dúvidas, quer ser um parceiro ou precisa de ajuda com a plataforma?</p>
+            <p class="contato__descricao ">O time do Big Street e do Grupo Magid está pronto para atender você.</p>
+        </div>
+
+        <div class="contato__informacao ">
+            <article class="card ">
+                <div class="card__cabecalho ">
+                    <svg width="28 " height="28 " viewBox="0 0 24 24 " fill="none " stroke="var(--cor-primaria) " stroke-width="2 " stroke-linecap="round " stroke-linejoin="round ">
+                        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2 "></path><circle cx="9 " cy="7 " r="4 "></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87 "></path><path d="M16 3.13a4 4 0 0 1 0 7.75 "></path>
+                    </svg>
+                    <h3 class="card__titulo ">PARA A COMUNIDADE</h3>
+                </div>
+                <p class="card__subtitulo ">(Suporte)</p>
+                <p class="card__info "><span class="card__destaque ">WhatsApp:</span> <a href="https://wa.me/5500900000000 " target="_blank ">+55 (XX) 9XXXX-XXXX</a></p>
+                <p class="card__info "><span class="card__destaque ">Central de Ajuda:</span> <a href="/faq ">Acesse as Dúvidas Frequentes (FAQ)</a></p>
+            </article>
+
+            <article class="card ">
+                <div class="card__cabecalho ">
+                    <svg width="28 " height="28 " viewBox="0 0 24 24 " fill="none " stroke="var(--cor-primaria) " stroke-width="2 " stroke-linecap="round " stroke-linejoin="round ">
+                        <path d="m11 17 2 2a1 1 0 1 0 3-3 "></path><path d="m14 14 2.5 2.5a1 1 0 1 0 3-3l-3.88-3.88a3 3 0 0 0-4.24 0l-.88.88a1 1 0 1 1-3-3l2.81-2.81a5.79 5.79 0 0 1 7.06-.87l.47.28a2 2 0 0 0 1.42.25L21 4 "></path><path d="m21 3-6 6
+                        "></path><path d="m21 16-1.85 1.85a1 1 0 0 1-3 0L12 14l-2.76 2.76a3 3 0 0 1-4.24 0l-1.96-1.96a1.5 1.5 0 0 1 0-2.12l5.36-5.36a3 3 0 0 1 4.24 0L14 8 "></path><path d="m8 10-5 5 "></path>
+                    </svg>
+                    <h3 class="card__titulo ">GRUPO MAGID</h3>
+                </div>
+                <p class="card__subtitulo ">(Parcerias)</p>
+                <p class="card__info "><span class="card__destaque ">E-mail:</span> <a href="mailto:parcerias@bigstreet.com.br ">parcerias@bigstreet.com.br</a></p>
+                <p class="card__info "><span class="card__destaque ">LinkedIn:</span> <a href="https://linkedin.com/company/grupomagid " target="_blank ">/Grupo Magid</a></p>
+            </article>
+        </div>
+
+        <form class="contato__formulario " action="# " method="POST ">
+            <div class="formulario__linha ">
+                <div class="formulario__grupo ">
+                    <label for="nome " class="formulario__label ">Nome:</label>
+                    <input type="text " id="nome " name="nome " class="formulario__input " required>
+                </div>
+                <div class="formulario__grupo ">
+                    <label for="email " class="formulario__label ">E-mail:</label>
+                    <input type="email " id="email " name="email " class="formulario__input " required>
+                </div>
+                <div class="formulario__grupo ">
+                    <label for="perfil " class="formulario__label ">Qual é o seu perfil?</label>
+                    <select id="perfil " name="perfil " class="formulario__input " required>
+                        <option value=" " disabled selected>Selecione</option>
+                        <option value="jogador ">Sou Jogador</option>
+                        <option value="outro ">Outros</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="formulario__linha formulario__linha--mensagem ">
+                <div class="formulario__grupo formulario__grupo--expandido ">
+                    <label for="mensagem " class="formulario__label ">Mensagem:</label>
+                    <textarea id="mensagem " name="mensagem " rows="1 " class="formulario__input " required></textarea>
+                </div>
+                <div class="formulario__grupo formulario__grupo--botao ">
+                    <button type="submit " class="formulario__botao ">ENVIAR MENSAGEM</button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+    <footer class="footer ">
+        <div class="footer__container ">
+            <div class="footer__brand ">
+                <div class="logo ">
+                    <span class="white-text ">Big</span><span class="orange-text ">Street</span>
+                </div>
+                <p class="footer__description ">A revolução na gestão e organização do esporte amador nas ruas e quadras.</p>
+                <div class="footer__magid ">
+                    <span>Um projeto orgulhosamente apoiado pelo</span><br>
+                    <strong>Grupo Magid</strong>
+                </div>
+            </div>
+
+            <div class="footer__links ">
+                <div class="footer__column ">
+                    <h4 class="footer__title ">O Big Street</h4>
+                    <ul>
+                        <li><a href="# ">Sobre Nós</a></li>
+                        <li><a href="# ">Grupo Magid</a></li>
+                        <li><a href="# ">Termos de Uso</a></li>
+                        <li><a href="# ">Política de Privacidade</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__column ">
+                    <h4 class="footer__title ">Para a Comunidade</h4>
+                    <ul>
+                        <li><a href="# ">Encontrar Quadras</a></li>
+                        <li><a href="# ">Como funciona a Fila</a></li>
+                        <li><a href="# ">Regras e Conduta</a></li>
+                        <li><a href="# ">Central de Ajuda (FAQ)</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer__column ">
+                    <h4 class="footer__title ">Para o seu Negócio</h4>
+                    <ul>
+                        <li><a href="# ">Cadastre sua Quadra</a></li>
+                        <li><a href="# ">Planos e Preços</a></li>
+                        <li><a href="# ">Painel do Gestor</a></li>
+                        <li><a href="# ">Seja um Parceiro</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer__bottom ">
+            <p>&copy; 2026 Big Street. Todos os direitos reservados. Projeto do Grupo Magid.</p>
+        </div>
+    </footer>
+
+</body>
+
+</html>
